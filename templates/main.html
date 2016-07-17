@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+     <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css" integrity="sha384-XXXXXXXX" crossorigin="anonymous">
+
+     <link rel="stylesheet" href="../static/main.css">
+</head>
+<body>
+    <div class="container">
+        <section class="header">
+            <h1>Tinder detective I guess</h1>
+            <p><a href="http://blog.gotinder.com/introducing-tinder-social/">"It's important to note Tinder's not a secret considering 70% of users download Tinder because their friends recommend it."</a></p>
+        </section>
+    </div>
+
+    <section class="container">
+        {% for profile in profiles %}
+        <section class="profile">
+            <section class="photos">
+                {% for photo in profile.photos %}
+                    <img class="profile-photo" src="{{ photo.url }}"/>
+                {% endfor %}
+            </section>
+            <h3>{{ profile.name }}</h3>
+
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-4">
+                    <p class="bio"> {{ profile.bio }}</p>
+                    <p class="misc"> Last online: {{ profile.ping_time }}</p>
+                    <p class="misc"> Birthday: {{ profile.birth_date }}</p>
+                    <p class="misc"> Distance away (miles): {{ profile.distance_mi}}</p>
+                </div>
+                <div class="col-sm-4">
+                    <p class="misc"> Jobs: {{ profile.jobs }}</p>
+                    <p class="misc"> Schools: {{ profile.schools}}</p>
+                </div>
+                <div class="col-sm-4">
+                    <p class="misc"> Connection count: {{ profile.connection_count }}</p>
+                    <p class="misc"> Common like count: {{ profile.common_like_count }}</p>
+                    <p class="misc"> Common friend count: {{ profile.common_friend_count }}</p>
+                    <p class="misc"> Badges: {{ profile.badges }}</p>
+                </div>
+              </div>
+            </div>
+
+
+            <hr/>
+        </section>
+        {% endfor %}
+    </section>
+
+
+<script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js" integrity="sha384-XXXXXXXX" crossorigin="anonymous"></script>
+</body>
+
+</html>

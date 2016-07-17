@@ -2,6 +2,11 @@ import requests
 import json
 import os
 
+import datetime
+import dateutil
+from dateutil import parser
+from datetime import timezone
+
 import friend as friendo
 
 SECRETS_FILENAME = "SECRETS.json"
@@ -10,12 +15,22 @@ SECRETS_FILENAME = "SECRETS.json"
 class AuthenticationError(Exception):
     """Yeah it's really important to write extremely enterprise well-documented hacky API code. Hacker News will love it I swear."""
 
+class MoralityException(Exception):
+    """It might come in handy later."""
+
+class SquadError(Exception):
+    """I have no excuse for this one."""
+
 
 class NSASimulator:
 
     BASE_URL = "https://api.gotinder.com/"
 
-    def __init__(self, facebook_auth_filename):
+    def __init__(self, facebook_auth_filename=SECRETS_FILENAME):
+
+        # Look I have no idea what these are I just copy/pasted 
+        # them from the API call my phone makes. If this makes 
+        # you uncomfortable then you probably chill dude it's just bytes.
         self.headers = {
             "User-Agent": "Tinder Android Version 5.2.0",
             "Accept-Language": "en",
@@ -27,7 +42,8 @@ class NSASimulator:
             "platforms": "android"
         }
         self._load_fb_auth()
-        self._auth()
+        self.authed = False
+        self.profiles = None
         self.friends = set()
 
 
@@ -53,17 +69,35 @@ class NSASimulator:
         if response.status_code == 200:
             self.headers["X-Auth-Token"] = response.json()["token"]
             print("Authenticated to Tinder 🔒🔥")
+            self.authed = True
         else:
             raise AuthenticationError("Hey your Tinder auth didn't work. Did you put your Facebook user id and auth token into SECRETS.txt?")
 
 
     def _get(self, url):
+        if not self.authed:
+            self._auth()
         response = requests.get(self.BASE_URL + url, headers=self.headers)
         print(response.text)
         return response
 
     def get_facebook_friends_tinder_ids(self):
-        friend_data = self._get("group/friends").json()
+
+        if not os.path.exists(".creepyfile"):
+            be_creepy = input("Sure you want to look at your Facebook friends' Tinder profiles? They might not like that. 🔒 [y/n]: ").lower() in ("y", "yes")
+
+            if not be_creepy:
+                raise MoralityException("😇 ")
+            else:
+                with open(".creepyfile", "w") as f:
+                    f.write("😈")
+                print("🔌🌐🔌")
+
+        request = self._get("group/friends")
+        if request.status_code != 200:
+            raise SquadError("Couldn't get info about your friends. Is Tinder Social enabled on your account? Hint: If you're not in Australia it probably isn't.")
+
+        friend_data = request.json()
         for result in friend_data["results"]:
             # Alright it's time for this json "parsing" fiesta.
             name = result["name"]
@@ -79,9 +113,29 @@ class NSASimulator:
 
         return self.friends
 
-    def get_profile(friend):
+    def get_profile(self, friend):
         profile_data = self._get("user/" + friend.tid).json()["results"]
+
+        # Let's just put some smooth UX on that.
+        profile_data["ping_time"] = self._to_local_time(profile_data["ping_time"])
+        profile_data["birth_date"] = self._to_local_time(profile_data["birth_date"])
         return profile_data
+
+    @staticmethod
+    def _to_local_time(timestring):
+
+        def utc_to_local(utc_dt):
+            return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
+
+        datetime_ = parser.parse(timestring)
+        return utc_to_local(datetime_).strftime("%b %d %Y %H:%M:%S")
+
+    def get_profiles(self):
+        if self.profiles is not None:
+            return self.profiles
+        friends = self.get_facebook_friends_tinder_ids()
+        self.profiles = [self.get_profile(friend) for friend in friends]
+        return self.profiles
 
 if __name__ == "__main__":
         stalker = NSASimulator(facebook_auth_filename="SECRETS.json")

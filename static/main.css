@@ -1,0 +1,26 @@
+
+body {
+    padding-top: 70px;
+}
+section.photos {
+    margin-bottom: 50px; 
+}
+section.profile {
+    margin-bottom: 50px;
+    margin-top: 50px;
+
+}
+img.profile-photo {
+    width: 200px;
+    display: inline-block;
+}
+p.bio {
+    font-style: italic;
+    color: #aaaaaa;
+}
+p.misc {
+    font-weight: bold;
+    color: #DB4C2C;
+
+}
+
