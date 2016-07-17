@@ -11,4 +11,4 @@ If you answer "y", the app will be available at `http://localhost:5000`.
 
 
 # Why did you make this?
-¯\_(ツ)_/¯
+¯\\_(ツ)_/¯
