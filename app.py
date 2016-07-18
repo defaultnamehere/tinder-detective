@@ -1,7 +1,6 @@
 
-import requests
 
-from flask import Flask, render_template, send_file
+from flask import Flask, render_template
 
 import api
 

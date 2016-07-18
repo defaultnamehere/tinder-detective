@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
 
-     <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css" integrity="sha384-XXXXXXXX" crossorigin="anonymous">
+     <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css" crossorigin="anonymous">
 
      <link rel="stylesheet" href="../static/main.css">
 </head>
@@ -18,42 +18,48 @@
     <section class="container">
         {% for profile in profiles %}
         <section class="profile">
-            <section class="photos">
+            <section class="photos container">
                 {% for photo in profile.photos %}
                     <img class="profile-photo" src="{{ photo.url }}"/>
                 {% endfor %}
             </section>
-            <h3>{{ profile.name }}</h3>
+
+            <div class="container">
+                <h3>{{ profile.name }}</h3>
+            </div>
 
             <div class="container">
               <div class="row">
                 <div class="col-sm-4">
                     <p class="bio"> {{ profile.bio }}</p>
+                </div>
+                <div class="col-sm-4">
                     <p class="misc"> Last online: {{ profile.ping_time }}</p>
                     <p class="misc"> Birthday: {{ profile.birth_date }}</p>
                     <p class="misc"> Distance away (miles): {{ profile.distance_mi}}</p>
-                </div>
-                <div class="col-sm-4">
-                    <p class="misc"> Jobs: {{ profile.jobs }}</p>
-                    <p class="misc"> Schools: {{ profile.schools}}</p>
+                    <p class="misc"> Jobs: {{ profile.jobs or None }}</p>
+                    <p class="misc"> Schools: {{ profile.schools or None }}</p>
                 </div>
                 <div class="col-sm-4">
                     <p class="misc"> Connection count: {{ profile.connection_count }}</p>
-                    <p class="misc"> Common like count: {{ profile.common_like_count }}</p>
+                    <p class="misc">Common like count: {{ profile.common_like_count }}</p>
                     <p class="misc"> Common friend count: {{ profile.common_friend_count }}</p>
-                    <p class="misc"> Badges: {{ profile.badges }}</p>
+                    <p class="misc"> Common likes: {{ profile.common_likes or None}}</p>
+                    <p class="misc"> Badges: {{ profile.badges or None }}</p>
                 </div>
               </div>
-            </div>
+          </div>
+          <section class="buttons container">
+              <a href="{{ profile.like_url }}"><button class="btn btn-success">Swipe right</button></a>
+              <a href="{{ profile.pass_url }}"><button class="btn btn-danger">Swipe left</button></a>
+          </section>
 
-
-            <hr/>
         </section>
         {% endfor %}
     </section>
 
 
-<script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js" integrity="sha384-XXXXXXXX" crossorigin="anonymous"></script>
+<script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

@@ -4,11 +4,16 @@ body {
 }
 section.photos {
     margin-bottom: 50px; 
+    padding-top: 15px;
 }
 section.profile {
     margin-bottom: 50px;
     margin-top: 50px;
+    background-color: #eceeef;
 
+}
+section.buttons {
+    padding-bottom: 25px;
 }
 img.profile-photo {
     width: 200px;

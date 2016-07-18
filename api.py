@@ -2,8 +2,6 @@ import requests
 import json
 import os
 
-import datetime
-import dateutil
 from dateutil import parser
 from datetime import timezone
 
@@ -28,8 +26,8 @@ class NSASimulator:
 
     def __init__(self, facebook_auth_filename=SECRETS_FILENAME):
 
-        # Look I have no idea what these are I just copy/pasted 
-        # them from the API call my phone makes. If this makes 
+        # Look I have no idea what these are I just copy/pasted
+        # them from the API call my phone makes. If this makes
         # you uncomfortable then you probably chill dude it's just bytes.
         self.headers = {
             "User-Agent": "Tinder Android Version 5.2.0",
@@ -117,8 +115,16 @@ class NSASimulator:
         profile_data = self._get("user/" + friend.tid).json()["results"]
 
         # Let's just put some smooth UX on that.
-        profile_data["ping_time"] = self._to_local_time(profile_data["ping_time"])
-        profile_data["birth_date"] = self._to_local_time(profile_data["birth_date"])
+        extra_datums = {
+            "ping_time": self._to_local_time(profile_data["ping_time"]),
+            "birth_date": self._to_local_time(profile_data["birth_date"]),
+            "like_url": self.BASE_URL + "like/" + friend.tid,
+            "pass_url": self.BASE_URL + "pass/" + friend.tid
+        }
+
+        # I apologise for nothing.
+        profile_data.update(extra_datums)
+
         return profile_data
 
     @staticmethod
@@ -135,6 +141,7 @@ class NSASimulator:
             return self.profiles
         friends = self.get_facebook_friends_tinder_ids()
         self.profiles = [self.get_profile(friend) for friend in friends]
+        self.profiles.sort(key=lambda p: p["name"])
         return self.profiles
 
 if __name__ == "__main__":
