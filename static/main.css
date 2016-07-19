@@ -26,6 +26,11 @@ p.bio {
 p.misc {
     font-weight: bold;
     color: #DB4C2C;
-
+}
+h1.title {
+    color: #DB4C2C;
+}
+a.slogan {
+    color: #818A91
 }
 
