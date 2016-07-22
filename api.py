@@ -69,7 +69,7 @@ class NSASimulator:
             print("Authenticated to Tinder 🔒🔥")
             self.authed = True
         else:
-            raise AuthenticationError("Hey your Tinder auth didn't work. Did you put your Facebook user id and auth token into SECRETS.txt?")
+            raise AuthenticationError("Hey your Tinder auth didn't work. Did you put your Facebook user id and auth token into {secrets_filename}?".format(secrets_filename=SECRETS_FILENAME))
 
 
     def _get(self, url):
