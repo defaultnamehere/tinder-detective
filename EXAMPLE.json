@@ -1,0 +1,5 @@
+// Make a file called SECRETS.json and fill it in like below
+{
+    "facebook_id": "",
+    "facebook_token": ""
+}
