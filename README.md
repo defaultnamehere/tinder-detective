@@ -15,4 +15,9 @@ Help it's not working
 Listen pal you gotta put your Facebook id and Facebook auth token in SECRETS.json. I have no idea how to get these without sniffing the traffic of the Tinder app with mitmproxy. Or you can use any proxy, really. Or there's probably another way to do it. Or you could just close this page and go talk to them, I'm sure they're nice.
 
 # Why did you make this?
-¯\\\_(ツ)\_/¯
+So people on Tinder would know that their Facebook friends could creepily stalk them.
+
+
+Hey I have a really moral reason for using this code to stalk an actual human being I know
+------------------------------------------------------------------------------------------
+_Do_ you though? Are you _sure_ you wouldn't rather just close this page and talk to them? It's probably going to help you a lot more than this code is.
