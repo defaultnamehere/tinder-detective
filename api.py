@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+from pprint import pprint
 
 from dateutil import parser
 from datetime import timezone
@@ -71,10 +72,17 @@ class NSASimulator:
         else:
             raise AuthenticationError("Hey your Tinder auth didn't work. Did you put your Facebook user id and auth token into {secrets_filename}?".format(secrets_filename=SECRETS_FILENAME))
 
+    def _post(self, url, data):
+        if not self.authed:
+            self._auth()
+        response = requests.post(self.BASE_URL + url, headers=self.headers, data=data)
+        print(response.text)
+        return response
 
     def _get(self, url):
         if not self.authed:
             self._auth()
+        print(self.headers)
         response = requests.get(self.BASE_URL + url, headers=self.headers)
         print(response.text)
         return response
@@ -102,7 +110,7 @@ class NSASimulator:
             tinder_id = result["user_id"]
             photos = result["photo"]
             sample_photo = photos[0]["processedFiles"][0]
-
+            pprint(result)
             # Just pick any url to extract the Facebook ID from.
             sample_url = sample_photo["url"]
             facebook_id = sample_url.split("/")[3]
@@ -118,8 +126,9 @@ class NSASimulator:
         extra_datums = {
             "ping_time": self._to_local_time(profile_data["ping_time"]),
             "birth_date": self._to_local_time(profile_data["birth_date"]),
-            "like_url": self.BASE_URL + "like/" + friend.tid,
-            "pass_url": self.BASE_URL + "pass/" + friend.tid
+            "like_url": "like/?user=" + friend.tid,
+            "superlike_url": "superlike/?user=" + friend.tid,
+            "pass_url": "pass/?user=" + friend.tid
         }
 
         # I apologise for nothing.
@@ -143,6 +152,20 @@ class NSASimulator:
         self.profiles = [self.get_profile(friend) for friend in friends]
         self.profiles.sort(key=lambda p: p["name"])
         return self.profiles
+
+    def like(self, user):
+        print(user)
+        print(self.BASE_URL + "like/" + user)
+        self._get("like/" + user)
+
+    def superlike(self, user):
+        print(user)
+        print(self.BASE_URL + "like/" + user + "/super")
+        self._post("like/" + user + "/super", {})
+
+    def pass_vote(self, user):
+        print(user)
+        print("here's the part where I make a request to {base_url}{url}".format(base_url=self.BASE_URL, url="pass/" + user))
 
 if __name__ == "__main__":
         stalker = NSASimulator(facebook_auth_filename="SECRETS.json")
