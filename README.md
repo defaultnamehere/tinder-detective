@@ -1,3 +1,10 @@
+
+
+Update from 2018: This no longer works. Tinder has removed the "Tinder Social" feature entirely. We did it I guess?
+
+
+
+
 # tinder-detective
 Stalk your friends on Tinder. Don't actually do that. It's just a description of what this code does.
 
